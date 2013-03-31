@@ -1,0 +1,501 @@
+\documentclass{beamer}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath,amscd}
+\usepackage{chngpage}
+\usepackage{tikz}
+\usepackage{ifthen}
+\usepackage{relsize}
+\usepackage{multirow}
+\usepackage{cleveref}
+\usepackage{url}
+
+\usepackage{ dsfont }
+
+
+\usetikzlibrary{positioning}
+\usetikzlibrary{matrix}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes}
+\usetikzlibrary{arrows}
+\usetikzlibrary{fit}
+\usetikzlibrary{decorations}
+\usetikzlibrary{snakes}
+\usetikzlibrary{shadows}
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{backbackground}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{backbackground,background,main,foreground}
+
+
+%%%% PICTURE IF CITATION
+
+
+\usepackage{animate}
+\usepackage{color, colortbl}
+\usepackage{xspace}
+\usepackage{sidecap}
+
+%\usepackage{biblatex}
+\usepackage[style=verbose-note]{biblatex}
+\bibliography{RNApyro}
+
+\newcommand{\PE}[1]{E(#1)}
+\newcommand{\EI}{\text{EI}}
+\newcommand{\ES}{\text{ES}}
+\newcommand{\ISO}{\text{ISO}}
+\newcommand{\Z}[3]{\mathcal{Z}_{\substack{(#1)\\ [#3]}}^{#2}}
+\newcommand{\Y}[3]{\mathcal{Y}_{\substack{(#1)\\ [#3]}}^{#2}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\Kron}{\delta}
+\newcommand{\ub}{\bullet}
+
+\newcommand{\Ab}{{\sf{A}}}
+\newcommand{\Cb}{{\sf{C}}}
+\newcommand{\Gb}{{\sf{G}}}
+\newcommand{\Ub}{{\sf{U}}}
+
+\newcommand{\SpaceCheating}{\vspace{-0em}}
+
+%\usepackage[numbers]{natbib}
+%\usepackage{bibentry}
+%
+%%Cite in text
+%\newcommand{\ignore}[1]{}
+%\newcommand{\nobibentry}[1]{{\let\nocite\ignore\bibentry{#1}}}
+%% apsrev entries in the text need definitions of these commands
+%\newcommand{\bibfnamefont}[1]{#1}
+%\newcommand{\bibnamefont}[1]{#1}
+
+
+%\newcommand{myhighlight}{yellow}
+%\usepackage[table]{xcolor}
+%\newcolumntype{K}{\columncolor[gray]{0.8}\centering}
+% \usepackage{beamerthemesplit} // Activate for custom appearance
+
+\newcommand{\JW}{\href{http://www.cs.mcgill.ca/~jeromew/}{J\'er\^ome Waldisp\"uhl\xspace}}
+\newcommand{\YP}{\href{http://www.lix.polytechnique.fr/~ponty/}{Yann Ponty\xspace}}
+
+
+
+\title{A Linear Inside-Outside Algorithm for Correcting Sequencing Errors
+in Structured RNAs}
+\titlegraphic{\includegraphics[width=0.35\textwidth]{Figures/title_fig}}
+\author{Vladimir Reinharz\\ \YP, \JW\\\textcolor{blue}{csb.cs.mcgill.ca}\\\textcolor{blue}{vladimir.reinharz@mail.mcgill.ca}\\McGill University}
+\date{\today}
+
+\begin{document}
+
+\definecolor{myhighlight}{rgb}{0.82,0.82,0.82}
+
+\frame{\titlepage}
+
+%
+%\frame{
+%	\frametitle{\texttt{RNApyro }}
+%%	Detection of sequencing errors in structured regions exploring mutants space using a pseudo-energy combining Turner 2004 stacking energies and isostericity
+%	\begin{figure}
+%		\centering
+%		\includegraphics[width=\textwidth]{Figures/rnapyro_work.png}
+%	\end{figure}
+%	\begin{itemize}
+%		\item Phylogenetic studies are based on the fact that function depends on structure
+%		\item Incorporating \texttt{isostericity} into sequencing error detection
+%	\end{itemize}
+%
+%}
+
+
+\frame{
+	\frametitle{\texttt{RNAPyro} in a nutshell\\\small Sequencing errors corrections}
+	\begin{figure}
+		\centering
+		\resizebox{\textwidth}{!}{\input{Figures/FigRNAPyroGoal.pgf}}
+	\end{figure}
+}
+
+\frame{
+	\frametitle{Pyrosequencing}
+		\begin{itemize}
+						\item Inflates diversity estimates\footnote{Victor Kunin et al. \textit{“Wrinkles in the rare biosphere: pyrosequencing errors can lead to artificial inflation of diversity estimates.”}, Environmental microbiology, 2010}
+			\item Next-Generation sequencing generates a wealth of data
+			\item Sequencing has a high error rate
+			\item Multiple Sequence Alignments and replications to increase confidence 
+		\end{itemize}
+}
+
+\frame{
+	\frametitle{Single Cell rRNA Sequencing}
+	
+	\begin{minipage}{0.45\textwidth}
+		\begin{itemize}
+			\item Previous considerations essentials for studies as the 
+				\texttt{Human Microbiome Project}\footnotemark
+			\item No replication steps implies up to $10\%$ of errors
+			\item rRNAs are prime candidates for phylogenetic studies due to 
+					their highly conserved structures and fundamental functions
+		\end{itemize}
+	\end{minipage}
+	\begin{minipage}{0.49\textwidth}
+		\begin{figure}
+			\centering
+			\includegraphics[width=\textwidth]{Figures/human_micro.png}
+		\end{figure}
+	\end{minipage}
+	\footnotetext[2]{Peter J Turnbaugh et al. \textit{“The Human Microbiome Project.”}, Nature, 2007\\}
+	%\autocite*{Turnbaugh2007}
+}
+
+
+\frame{
+	\frametitle{Additive Stacking-Pairs Energy \ES}
+		\begin{itemize}
+			\item Experimentally determined for every stacked canonical base pairs  						between $-3.5$ and $+1$
+			\item For non canonical base pairs parameter $\beta$ which can be 
+					$+\infty$ 					
+		\end{itemize}	
+		
+%		\begin{minipage}{0.45\textwidth}
+		
+		\definecolor{mycolor1}{RGB}{244,14,77}
+		\definecolor{mycolor2}{RGB}{57,181,74}
+		\definecolor{mycolor3}{RGB}{46,49,146}
+		\definecolor{mycolor4}{RGB}{151,113,43}
+%		
+%			\begin{tabular}{c}
+%			\large
+%				Energy\\ \\
+%				\scalebox{1.3}{\textcolor{mycolor1}{A$=-1.3$}}\\\pause
+%				\scalebox{1.3}{\textcolor{mycolor2}{B$=-1.5$}}\\\pause
+%				\scalebox{1.3}{\textcolor{mycolor3}{C$=-2.1$}}\\\pause
+%				\scalebox{1.3}{\textcolor{mycolor4}{D$=\beta$}}\\\hline\\
+%				\scalebox{1.3}{$\ES(s,S)=-4.9+\beta$}
+%			\end{tabular}
+%		\end{minipage}
+%		\begin{minipage}{0.45\textwidth}
+			\begin{figure}
+				\centering
+					\includegraphics<1>[width=0.7\textwidth]{Figures/hairpin_stack_0.jpg}
+					\includegraphics<2>[width=0.7\textwidth]{Figures/hairpin_stack_1.jpg}
+					\includegraphics<3>[width=0.7\textwidth]{Figures/hairpin_stack_2.jpg}
+					\includegraphics<4>[width=0.7\textwidth]{Figures/hairpin_stack_3.jpg}
+					\includegraphics<5>[width=0.7\textwidth]{Figures/hairpin_stack_4.jpg}
+
+			\end{figure}
+%		\end{minipage}
+}
+
+\frame{
+	\frametitle{Isostericity}
+		\begin{itemize}
+			\item In fact, interactions between \textbf{any} pair of nucleotides 									\item Between $+0$ and $+10$ reflects geometrical discrepancy 
+				\footnote{Jesse Stombaugh et al. \textit{“Frequency and isostericity of RNA base pairs.”}, Nucleic acids research, 2009}	%\footfullcite{Stombaugh2009}
+			\item We only consider \texttt{cWW} orientation
+			\item  $\displaystyle\EI(s,S,\Omega) =\frac{1}{|\Omega|} \sum_{\substack{(i,j)\in S \text{pairs}}}\EI^{\Omega}_{(i,j),s_i s_j}$
+		\end{itemize}
+
+		\begin{minipage}{0.45\textwidth}		
+			\begin{figure}
+				\centering
+										\includegraphics[width=\textwidth]{Figures/AU_AC_iso.png}\\
+			\end{figure}
+		\end{minipage}
+		\begin{minipage}{0.45\textwidth}		
+			\begin{table}
+				\centering
+				\begin{tabular}{cc}
+								S							&		\texttt{...(...)...} \\
+						s		& \texttt{...$\hspace{-7pt}\underbrace{\texttt{C}}_{i}\hspace{-7pt}$...$\hspace{-7pt}\underbrace{\texttt{A}}_{j}\hspace{-7pt}$...}\\
+					\scalebox{1.2}{$\Omega$}			&	\\
+					\texttt{...A...U...}	 &	 $+2.75$		\\
+					\texttt{...G...U...} &	 $+4.76$			\\
+					\texttt{...$\hspace{-7pt}\underbrace{\texttt{A}}_{s_i}\hspace{-7pt}$...$\hspace{-7pt}\underbrace{\texttt{U}}_{s_j}\hspace{-7pt}$...} &	 $+2.75$			\\\cline{2-2}
+															 & $\phantom{+}3.42$
+				\end{tabular}
+			\end{table}
+		\end{minipage}
+
+
+}
+
+
+\frame{
+	\frametitle{Probabilistic Model}
+	\begin{itemize}
+		\item We can define a Boltzmann distribution
+		\item Due to additive properties of the \texttt{Stacking Energy} and the
+		\texttt{Isosteric Discrepancy} we can efficiently compute it with a 
+			Dynamic Programming scheme
+	\end{itemize}
+	
+%	\scalebox{1.3}{
+	\begin{minipage}{0.45\textwidth}
+		\begin{align*}
+			\mathcal{B}(s):&= e^\frac{-\PE{s}}{RT}\\
+			\PE{s}:&=\alpha\cdot\hspace{-20pt}\underbrace{\ES}_{\text{Stacking Energy}}\hspace{-15pt}(s,S)\\
+			&+(1-\alpha)\cdot\hspace{-30pt}\underbrace{\EI}_{\text{Isosteric Discrepancy}}\hspace{-25pt}(s,S,\Omega)\\
+		\end{align*}	
+	\end{minipage}
+	\begin{minipage}{0.45\textwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{Figures/convergence5.pdf}
+	\end{figure}
+	\end{minipage}
+
+}
+
+\frame{
+	\frametitle{RNAPyro}
+		Efficiently explore $m$ mutants space
+	\vspace{-15pt}
+	\begin{figure}
+		\centering
+		\resizebox{\textwidth}{!}{\input{Figures/FigMutExploration.pgf}}
+	\end{figure}
+}
+
+\frame{
+	\frametitle{Computing probability}
+	\vspace{-10pt}
+	\scalebox{1.2}{$\text{Probability of } nt_9=x \text{ and } nt_{15} =y \text{ with }k\text{ mutations}$}
+	\begin{figure}
+		\centering
+		\resizebox{1.1\textwidth}{!}{\input{Figures/FigDPProb.pgf}}
+	\end{figure}
+}
+
+
+
+\frame{
+	\frametitle{Inside}
+	\begin{figure}
+		\centering
+		\resizebox{\textwidth}{!}{\input{Figures/FigDPInside.pgf}}
+	\end{figure}
+}
+
+\frame{
+	\frametitle{Inside example}
+	\begin{figure}[t!]
+		\centering
+		\resizebox{\textwidth}{!}{\input{Figures/FigDPInsideEx.pgf}}
+	\end{figure}
+}
+
+
+\frame{
+	\frametitle{Outside}
+	\begin{figure}
+		\centering
+		\resizebox{\textwidth}{!}{\input{Figures/FigDPOutside.pgf}}
+	\end{figure}
+}
+
+\frame{
+	\frametitle{Benchmarks}
+	\begin{itemize}
+		\item Reconstruct 5s \texttt{rRNA} sequences with random mutations
+		\item Length $120$nt, $10\%$ errors
+		\item $45$ sequences without gap with less than $80\%$ of sequence similarity.
+		\item Leave-one-out strategy
+		\item Evaluate:
+		\begin{itemize}
+			\item Influence of $\alpha$ (i.e. weight of Stacking energy vs Isostericity)
+			\item Over and under estimation of errors
+		
+		\end{itemize}
+	
+	\end{itemize}
+}
+\frame{
+	\frametitle{Results}
+	\begin{minipage}{0.475\textwidth}
+		\begin{figure}
+			\centering
+			\includegraphics[width=1.1\textwidth]{Figures/ROC_12.pdf}
+		\end{figure}
+		Correct number of mutations
+	\end{minipage}
+	\begin{minipage}{0.475\textwidth}
+		\begin{figure}
+			\centering
+			\includegraphics[width=1.1\textwidth]{Figures/ROC_24.pdf}
+		\end{figure}
+	Over estimation of mutations
+	\end{minipage}
+}
+
+
+\frame{
+	\frametitle{Future}
+	\begin{minipage}{0.45\textwidth}
+	\begin{itemize}
+		\item Algorithmic
+		\begin{itemize}
+			\item Include gaps
+			\item Implement full energetic model
+		\end{itemize}
+		\item Non-canonical annotations
+		\item Incorporate into sequencing pipelines
+	\end{itemize}
+	\end{minipage}
+	\begin{minipage}{0.45\textwidth}
+		\begin{equation*}
+		\label{eq:Z_rec}
+		\resizebox{\textwidth}{!}{%
+			$\Z{i,j}{m}{a,b}:=\left\{
+	  \begin{array}{ll}
+  		\displaystyle
+      \sum_{\substack{a'\in \B,\\ \Kron_{a',s_i}\le m}}  
+      \Z{i+1,j}{m-\Kron_{a',s_i}}{a',b} & \text{If }S_{i}=-1\\
+      \displaystyle
+      \sum_{\substack{a',b'\in \B^2,\\ \Kron_{a'b',s_is_j}\le m}}
+			 e^{\frac{-E_{(i,j),ab \to a'b'}^{\Omega,\beta}}{RT}}
+			 \cdot \Z{i+1,j-1}{m-\Kron_{a'b',s_is_j}}{a',b'}&
+			 \text{Elif }S_i=j \land S_{i-1}=j+1\\
+			 \displaystyle
+      \sum_{\substack{a',b'\in \B^2,\\ \Kron_{a'b',s_is_k}\le m}}
+      \sum_{m'=0}^{m-\Kron_{a'b',s_is_k}}
+   		 e^{\frac{-E_{(i,k),\varnothing\to a'b'}^{\Omega,\beta}}{RT}}
+      \cdot\Z{i+1,k-1}{m-\Kron_{a'b',s_is_k}-m'}{a',b'}
+      \cdot\Z{k+1,j}{m'}{b',b} & \text{Elif }S_i=k \land i < k \leq j\\
+      0 &\text{Otherwise}
+		\end{array}\right.$}
+		\end{equation*}
+	\begin{equation*}
+\resizebox{\textwidth}{!}{%
+	$\Y{i,j}{m}{a,b} = \left\{
+  \begin{array}{ll}
+		\displaystyle
+    \sum_{\substack{a'\in \B,\\ \Kron_{a',s_i}\le m}}
+    \Y{i-1,j}{m- \Kron_{a',s_i}}{a',b} &
+    \text{Elif }S_i=-1 \\
+    \displaystyle
+    \sum_{\substack{a'b'\in \B^2,\\ \Kron_{a'b',s_is_j}\le m}}
+		 e^{\frac{-E_{(i,j),ab \to a'b'}^{\Omega,\beta}}{RT}}\cdot
+    \Y{i-1,j+1}{m- \Kron_{a'b',s_is_j}}{a',b'} &
+   	 \text{Elif }S_{i}=j \land S_{i+1}=j-1\\
+		 \displaystyle
+		 \sum_{\substack{a'b'\in \B^2,\\ \Kron_{a'b',s_is_k}\le m}}
+		 \sum_{m'=0}^{m-\Kron_{a'b',s_is_k}}
+  		 e^{\frac{-E_{(i,k),\varnothing\to a'b'}^{\Omega,\beta}}{RT}}
+		 \cdot\Y{i-1,k+1}{m- \Kron_{a'b',s_is_k} - m'}{a',b'}
+     \cdot\Z{j,k-1}{m'}{b,b'} &
+		 \text{Elif }S_{i}=k \geq j\\
+		 \displaystyle
+		 \sum_{\substack{a'b'\in \B^2,\\ \Kron_{a'b',s_ks_i}\le m}}
+		 \sum_{m'=0}^{m-\Kron_{a'b',s_ks_i}}
+   	 e^{\frac{-E_{(k,i),\varnothing\to a'b'}^{\Omega,\beta}}{RT}}
+		 \cdot\Y{k-1,j}{m- \Kron_{a'b',s_ks_i} - m'}{a',b}
+     \cdot\Z{k+1,i-1}{m'}{a',b'} &
+		 \text{Elif }-1 < S_{i}=k < i\\
+		 0 & \text{Otherwise}
+  \end{array}\right.$
+	}
+	\end{equation*}
+	\begin{equation*}
+\resizebox{\textwidth}{!}{%
+$ \mathcal{W}^M_{\substack{i, [x]}} =  \left\{
+	\begin{array}{ll}
+			\sum_{m=0}^{M}
+			\Y{i-1,i+1}{m-\Kron_{x,s_i}}{x,x}
+		&\text{If }S_i = -1\\
+			\displaystyle
+			\sum_{m=0}^{M}
+			\sum_{\substack{b\in B\\\Kron_{xb,s_is_k\leq m}}}
+			\sum_{m'=0}^{m-\Kron_{xb,s_is_k}}
+     	 e^{\frac{-E_{(i,k),\varnothing\to xb}^{\Omega,\beta} }{RT}}
+			\cdot\Y{i-1,k+1}{m-\Kron_{xb,s_is_k-m'}}{x,b}
+			\cdot\Z{i+1,k-1}{m'}{x,b}
+		&\text{If }S_i=k>i\\
+    \displaystyle
+			\sum_{m=0}^{M}
+			\sum_{\substack{b\in B\\\Kron_{bx,s_ks_i\leq m}}}
+			\sum_{m'=0}^{m-\Kron_{bx,s_ks_i}}
+     	 e^{\frac{-E^{\Omega, \beta}_{(k,i),\varnothing\to bx}}{RT}}
+			\cdot\Y{k-1,i+1}{m-\Kron_{bx,s_ks_i-m'}}{b,x}
+			\cdot\Z{k+1,i-1}{m'}{b,x}
+		&\text{If }S_i=k<i
+	\end{array}\right.
+$}\label{eq:combine}
+\end{equation*}
+	\end{minipage}
+}
+
+\frame{
+	\frametitle{Aknowledgment}
+	\begin{minipage}{0.45\textwidth}
+		\begin{itemize}
+			\item Cohautors
+			\begin{itemize}
+				\item \JW
+				\item \YP		
+			\end{itemize}
+		\item Discussions
+			\begin{itemize}
+				\item Rob Knight		
+			\end{itemize}
+		\end{itemize}	
+	\end{minipage}
+	\begin{minipage}{0.45\textwidth}
+		\begin{itemize}
+			\item \texttt{ISCB} travel fellowship
+		\end{itemize}
+%			\item  French Agence Nationale de la Recherche (ANR) through the {\sc Magnum} {\tt ANR 2010 BLAN 0204} 
+%project (to YP), 
+%			\item FQRNT team grant 232983 (to VR and JW) 
+%			\item NSERC Discovery grant 219671 (to JW).
+%		\end{itemize}	
+		\begin{minipage}{0.45\textwidth}
+		\begin{figure}
+			\centering
+			\includegraphics[width=\textwidth]{Figures/logoanr.png}
+		\end{figure}
+		\begin{figure}
+				\centering
+			\includegraphics[width=\textwidth]{Figures/logoinria.png}
+		\end{figure}
+		\begin{figure}
+			\centering
+			\includegraphics[width=\textwidth]{Figures/logofqrnt.png}
+		\end{figure}
+		\end{minipage}
+		\begin{minipage}{0.45\textwidth}
+		\begin{figure}
+			\centering
+			\includegraphics[width=\textwidth]{Figures/logonserc}
+		\end{figure}
+		\begin{figure}
+			\centering
+			\includegraphics[width=\textwidth]{Figures/logocnrs}
+		\end{figure}
+		\begin{figure}
+			\centering
+			\includegraphics[width=\textwidth]{Figures/logo_X}
+		\end{figure}
+		\end{minipage}		
+	\end{minipage}
+}
+
+
+\frame{
+	\frametitle{RNAPyro}
+	\begin{itemize}
+		\item Efficient exploration of the mutant space
+		\item Nt. probabilities in function of \texttt{Stacking Energy} and \texttt{Isostericity}
+		\item Resilient to over estimation of errors
+	\end{itemize}
+		\begin{center}
+		{\color{blue}\texttt{csb.cs.mcgill.ca}}
+	\end{center}
+	\begin{figure}
+		\centering
+		\resizebox{0.65\textwidth}{!}{\input{Figures/FigMutExplorationOne.pgf}}
+	\end{figure}
+}
+
+\end{document}
+
+
+
