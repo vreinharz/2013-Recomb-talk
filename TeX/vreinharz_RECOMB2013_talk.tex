@@ -146,6 +146,17 @@ in Structured RNAs}
 	%\autocite*{Turnbaugh2007}
 }
 
+\frame{
+	\frametitle{RNApyro}
+\begin{itemize}	\Large 
+	\item Pseudo-energy composed of
+		\begin{itemize}\Large
+			\item Stacked base pairs
+			\item Isostericity through evolutionary information
+		\end{itemize}
+		\item Parse $m-$mutants space to find nucleotides probabilities
+	\end{itemize}
+}
 
 \frame{
 	\frametitle{Additive Stacking-Pairs Energy \ES}
@@ -210,7 +221,7 @@ in Structured RNAs}
 					\texttt{...A...U...}	 &	 $+2.75$		\\
 					\texttt{...G...U...} &	 $+4.76$			\\
 					\texttt{...$\hspace{-7pt}\underbrace{\texttt{A}}_{s_i}\hspace{-7pt}$...$\hspace{-7pt}\underbrace{\texttt{U}}_{s_j}\hspace{-7pt}$...} &	 $+2.75$			\\\cline{2-2}
-															 & $\phantom{+}3.42$
+															 & $10.26/3$
 				\end{tabular}
 			\end{table}
 		\end{minipage}
@@ -278,7 +289,7 @@ in Structured RNAs}
 
 \frame{
 	\frametitle{Inside example}
-	\begin{figure}[t!]
+	\begin{figure}[b!]
 		\centering
 		\resizebox{\textwidth}{!}{\input{Figures/FigDPInsideEx.pgf}}
 	\end{figure}

@@ -76,7 +76,7 @@
 \coordinate (arrow6) at ($ (boltz_fig) - (30pt,10pt) $);
 \path[->]<1-> (arrow6) edge [bend right=15,line width=2,color=blue] node[above,sloped] {\color{black}\huge Stacking Energy} (arrow5) ;
 \coordinate (arrow6) at ($ (rnapyro.north) + (0,10pt) $);
-\path[->]<1-> (MSE.north) edge [bend left=55,line width=2,color=blue] node[above,sloped] {\color{black}\huge Isostericity} (arrow6);
+\path[->]<1-> (MSE.north) edge [bend left=55,line width=2,color=blue] node[above] {\color{black}\huge Isostericity} (arrow6);
 }
 
 \visible<3->{
@@ -86,12 +86,12 @@
 
 \visible<4->{
 \coordinate (arrow3) at ($ (rnapyro.south) - (0pt,0) $);
-\path[->]<1-> (e2.east) edge [bend right=30,line width=2] (arrow3);
+\path[->]<1-> (e2.east) edge [bend right=22,line width=2] (arrow3);
 }
 
 \visible<5->{
 \coordinate (arrow4) at ($ (rnapyro.south) + (20pt,0) $);
-\path[->]<1-> (e3.east) edge [bend right=15,line width=2] (arrow4);
+\path[->]<1-> (e3.east) edge [bend right=10,line width=2] (arrow4);
 }
 
 
