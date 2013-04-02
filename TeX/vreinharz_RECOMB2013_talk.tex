@@ -105,6 +105,21 @@ in Structured RNAs}
 %
 %}
 
+%\frame{
+%	\begin{tikzpicture}
+%		\newcommand{\centerDiff}{0pt};
+%		\newcommand{\circleRad}{15pt}
+%				
+%		\coordinate (b) at (0,0);
+%		\coordinate (t) at ($ (b) + (0,\centerDiff) $);
+%		\draw[-] (b) arc(55:125:\circleRad);
+%		\draw[-] (t) arc(-55:-125:\circleRad);		
+%		
+%		\draw[-,looseness=2] b -- ($ (b) + (-3pt,-2pt) $);
+%		
+%		
+%	\end{tikzpicture}
+%}
 
 \frame{
 	\frametitle{\texttt{RNAPyro} in a nutshell\\\small Sequencing errors corrections}
@@ -150,7 +165,7 @@ in Structured RNAs}
 	\frametitle{RNApyro}
 \begin{itemize}	\Large 
 	\item Pseudo-energy composed of
-		\begin{itemize}\Large
+		\begin{itemize}\large
 			\item Stacked base pairs
 			\item Isostericity through evolutionary information
 		\end{itemize}
@@ -449,6 +464,10 @@ $}\label{eq:combine}
 				\item Rob Knight		
 			\end{itemize}
 		\end{itemize}	
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.5\textwidth]{Figures/logofsm}
+	\end{figure}
 	\end{minipage}
 	\begin{minipage}{0.45\textwidth}
 		\begin{itemize}
