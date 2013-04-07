@@ -76,6 +76,7 @@
 \newcommand{\JW}{\href{http://www.cs.mcgill.ca/~jeromew/}{J\'er\^ome Waldisp\"uhl\xspace}}
 \newcommand{\YP}{\href{http://www.lix.polytechnique.fr/~ponty/}{Yann Ponty\xspace}}
 
+\setbeamertemplate{frametitle}[default][center]
 
 
 \title{A Linear Inside-Outside Algorithm for Correcting Sequencing Errors
@@ -135,7 +136,7 @@ in Structured RNAs}
 						\item Inflates diversity estimates\footnote{Victor Kunin et al. \textit{“Wrinkles in the rare biosphere: pyrosequencing errors can lead to artificial inflation of diversity estimates.”}, Environmental microbiology, 2010}
 			\item Next-Generation sequencing generates a wealth of data
 			\item Sequencing has a high error rate
-			\item Multiple Sequence Alignments and replications to increase confidence 
+			\item Multiple Sequence Alignments and amplification to increase confidence 
 		\end{itemize}
 }
 
@@ -169,7 +170,7 @@ in Structured RNAs}
 			\item Stacked base pairs
 			\item Isostericity through evolutionary information
 		\end{itemize}
-		\item Parse $m-$mutants space to find nucleotides probabilities
+		\item Efficiently explore $m-$mutants space to generate nucleotides probabilities
 	\end{itemize}
 }
 
@@ -257,7 +258,8 @@ in Structured RNAs}
 %	\scalebox{1.3}{
 	\begin{minipage}{0.45\textwidth}
 		
-		\scalebox{1.5}{$\mathcal{B}(s):= e^\frac{-\PE{s}}{RT}$}\\
+		Boltzmann factor:\\ \scalebox{1.5}{$\qquad\mathcal{B}(s):= e^\frac{-\PE{s}}{RT}$}\vspace{7pt}\\
+		Partition function:\vspace{7pt}\\\scalebox{1.5}{$\displaystyle\qquad\sum_s\mathcal{B}(s)$}\\\vspace{-15pt}
 		\begin{align*}
 			\PE{s}:&=\alpha\cdot\hspace{-20pt}\underbrace{\ES}_{\text{Stacking Energy}}\hspace{-15pt}(s,S)\\
 			&+(1-\alpha)\cdot\hspace{-30pt}\underbrace{\EI}_{\text{Isosteric Discrepancy}}\hspace{-25pt}(s,S,\Omega)\\
@@ -320,21 +322,37 @@ in Structured RNAs}
 }
 
 \frame{
-	\frametitle{Benchmarks}
+	\frametitle{Validation}
 	\begin{itemize}
-		\item Reconstruct 5s \texttt{rRNA} sequences with random mutations
-		\item Length $120$nt, $10\%$ errors
+		\item Reconstruct 5s \texttt{rRNA} sequences 
+%		\item Length $120$nt
 		\item $45$ sequences without gap with less than $80\%$ of sequence similarity.
+		\item $10\%$ random mutations
 		\item Leave-one-out strategy
 		\item Evaluate:
 		\begin{itemize}
 			\item Influence of $\alpha$ (i.e. weight of Stacking energy vs Isostericity)
 			\item Over and under estimation of errors
-		
+			\item Confidence threshold
 		\end{itemize}
-	
 	\end{itemize}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.8\textwidth]{Figures/logo.png}
+	\end{figure}
 }
+
+\frame{
+	\frametitle{Results}	
+	\begin{figure}
+			\centering
+			\includegraphics[height=0.75\textheight]{Figures/ROC_12.pdf}
+		\end{figure}
+	\begin{center}
+		Correct number of mutations
+	\end{center}
+}
+
 \frame{
 	\frametitle{Results}
 	\begin{minipage}{0.475\textwidth}
@@ -451,10 +469,10 @@ $}\label{eq:combine}
 }
 
 \frame{
-	\frametitle{Aknowledgment}
+	\frametitle{Acknowledgment}
 	\begin{minipage}{0.45\textwidth}
 		\begin{itemize}
-			\item Cohautors
+			\item Coauthors
 			\begin{itemize}
 				\item \JW
 				\item \YP		
