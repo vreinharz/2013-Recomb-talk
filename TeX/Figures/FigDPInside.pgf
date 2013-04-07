@@ -1,4 +1,5 @@
 %!TEX root = main_RECOMB.tex
+\usetikzlibrary{shapes.multipart}
 \begin{tikzpicture}
 
   \newcommand{\BSep}{9pt}
@@ -15,6 +16,12 @@ line after snake=0pt,
   \tikzstyle{block}=[trapezium,trapezium angle=83, fill=blue!20, draw=blue!40,line width=1.5pt, inner sep=0]
   \tikzstyle{lbl}=[inner sep=0]
   \tikzstyle{arr}=[line width=1.3pt,->]
+  
+%  \begin{tikzpicture}[every text node part/.style={align=left}]
+
+  
+
+
 
   \node[base] (a-1) at (0,0) {$s_i$};
   \node[base] (a-2) at (3,0) {$s_j$};
@@ -37,8 +44,8 @@ line after snake=0pt,
   \end{pgfonlayer}{background}
   
 \coordinate (seq_space) at ($ (r1.north west) + (-25pt, 100pt) $);
-\node[right=0pt of seq_space] (ex_seq) {\huge Explore sequence space};
-\node[above=0pt of ex_seq] {\huge Structure fixed};
+\node[align=left,right=0pt of seq_space] (ex_seq) {\huge Explore sequence space\\\huge Structure fixed};
+%\node[above=0pt of ex_seq] {\huge Structure fixed};
  \visible<5->{
  	\node[below=0pt of r1] {\huge Only $1$ case applies};
  }

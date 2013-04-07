@@ -50,8 +50,8 @@ line after snake=0pt,
   \end{scope}
 
 \coordinate (seq_space) at ($ (r1.north) + (-25pt, 150pt) $);
-\node[right=0pt of seq_space] (ex_seq) {\Huge Explore sequence space};
-\node[above=0pt of ex_seq] {\Huge Structure fixed};
+\node[align=left,right=0pt of seq_space] (ex_seq) {\Huge Explore sequence space\\\Huge Structure fixed};
+%\node[above=0pt of ex_seq] {\Huge Structure fixed};
 
 
 \visible<6->{
