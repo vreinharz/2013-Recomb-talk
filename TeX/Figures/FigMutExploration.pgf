@@ -23,6 +23,9 @@
 \node[ellipse,fit=(c-west) (c-east) (c-north) (c-south),line width=2pt,color=black] (e0) {};
 %\node[above=\TopEll of e0] {\Large no mutation};
 
+\visible<1-2>{
+\node[below=5pt of e0] {\Large Input sequence};
+}
 \visible<3->{
 \node[ellipse,fit=(e0),line width=2pt,color=black] (e1) {};
 \node[above=\TopEll of e1] {\Large 1 mutation};

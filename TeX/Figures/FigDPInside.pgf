@@ -35,6 +35,13 @@ line after snake=0pt,
   \node[rectangle,inner sep=2pt,draw,fit=(a-1.west)(a-2.east) (c1) (c2)] (r1) {};
   \path[block]   (r1.south west) to  (r1.south east) to (r1.north east) to[out=90,in=90] (r1.north west) to (r1.south west) ;
   \end{pgfonlayer}{background}
+  
+\coordinate (seq_space) at ($ (r1.north west) + (-25pt, 100pt) $);
+\node[right=0pt of seq_space] (ex_seq) {\huge Explore sequence space};
+\node[above=0pt of ex_seq] {\huge Structure fixed};
+ \visible<5->{
+ 	\node[below=0pt of r1] {\huge Only $1$ case applies};
+ }
 
 
 \visible<2,5>{
@@ -105,7 +112,7 @@ line after snake=0pt,
   \node[rectangle,inner sep=2pt,fit=(a-pa.west)(a-2.east) (c4) (c5)] (r2) {};
   \path[block]   (r2.south west) to (r2.south east) to (r2.north east) to[out=90,in=90,looseness=1.8] (r2.north west) to (r2.south west) ;
 
-  \path (a-0) to node[midway,yshift=-3.5em] {\relsize{+2}[Position $i$ paired anywhere else]} (a-3);
+  \path (a-0) to node[midway,yshift=-3.5em] {\relsize{+2}[Position $i$ paired with $k$]} (a-3);
   }
   \end{pgfonlayer}{background}
 
@@ -146,6 +153,8 @@ line after snake=0pt,
   \path[block]   (r1.south west) to  (r1.south east) to (r1.north east) to[out=90,in=90,looseness=.9] (r1.north west) to (r1.south west) ;
   \path (a-0) to node[midway,yshift=-3.5em] {\relsize{+2}[Paired ends + Stacking pairs]} (a-3);}
   \end{pgfonlayer}{background}
+
+
 
 \end{scope}
 \draw[arr] (x) -- (y3);

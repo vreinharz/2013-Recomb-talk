@@ -60,10 +60,10 @@ line after snake=0pt,
   \node[rectangle,inner sep=2pt,fit=(a-10.west) (northr1) (a-14.east) (i-10) (i-14)] (r1) {};
   \path[inblock]   (r1.south west) to  (r1.south east) to (r1.north east) 		to[out=90,in=90] (r1.north west) to (r1.south west) ;
   \node[below=-10pt of r1.north] (m1) {\scalebox{1.5}{$m$}};
-  	\node[below=15pt of a-12] (inside) {\scalebox{1.4}{$\mathds{P}\text{ Inside}$}};
+  	\node[below=15pt of a-12] (inside) {\scalebox{1.4}{$\mathds{Z}\text{ Inside}$}};
 	}
 	\visible<2>{
-	  \node[above=170pt of a-6] (total) {\scalebox{1.8}{$\mathds{P}(\text{ Inside}\mid nt_9=x\text{ and }nt_{15}=y)\times$}};
+	  \node[above=170pt of a-6] (total) {\scalebox{1.8}{$\mathds{Z}(\text{ Inside}\mid nt_9=x\text{ and }nt_{15}=y)\times$}};
 	  \node[below=0pt of total] (nut) {\scalebox{1.8}{$m\text{ mutations}$}};
 	}
 
@@ -76,9 +76,9 @@ line after snake=0pt,
 	\coordinate (northr2) at ($ (a-9.north) + (0,8pt) $);
 	\node[rectangle,inner sep=2pt, fit=(a-0.west) (northr2) (a-18.east) (i-0.south) (i-18.south)] (r2) {};
 \path[outblock] (r1.south west) to (r2.south west) to (r2.north west) to[out=90,in=90] (r2.north east) to (r2.south east) to (r1.south east) to (r1.north east) to[out=90,in=90] (r1.north west) to (r1.south west);
-	  	\node[below=15pt of a-5] (outside) {\scalebox{1.4}{$\mathds{P}\text{ Outside}$}};
+	  	\node[below=15pt of a-5] (outside) {\scalebox{1.4}{$\mathds{Z}\text{ Outside}$}};
 		  \node[below=-80pt of r2.north] (m2) {\scalebox{1.5}{$m'$}};
-			\node[above=170pt of a-10] (total) {\scalebox{1.8}{$\mathds{P}(\text{ Inside}\mid nt_9=x	\text{ and }nt_{15}=y)\times\mathds{P}(\text{ Outside}\mid nt_9=x\text{ and }nt_{15}=y)$}};
+			\node[above=170pt of a-10] (total) {\scalebox{1.8}{$\mathds{Z}(\text{ Inside}\mid nt_9=x	\text{ and }nt_{15}=y)\times\mathds{Z}(\text{ Outside}\mid nt_9=x\text{ and }nt_{15}=y)$}};
 			\node[below=0pt of total] (nut) {\scalebox{1.8}{$m\text{ mutations }+ m'\text{ mutations }=k$}};
 	}
 \end{pgfonlayer}{background}

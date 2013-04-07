@@ -49,6 +49,16 @@ line after snake=0pt,
   \end{pgfonlayer}{background}
   \end{scope}
 
+\coordinate (seq_space) at ($ (r1.north) + (-25pt, 150pt) $);
+\node[right=0pt of seq_space] (ex_seq) {\Huge Explore sequence space};
+\node[above=0pt of ex_seq] {\Huge Structure fixed};
+
+
+\visible<6->{
+	\coordinate (case_app) at ($ (r1.south) + (-25pt, -15pt) $);
+	\node[right=0pt of case_app] {\Huge\hspace{10pt} Only $1$ case applies};
+}
+
 
 \visible<2,6>{
   \begin{scope}[xshift=\HSep,yshift=170pt]
@@ -149,7 +159,7 @@ line after snake=0pt,
   \path[linez] (n-beg) -- (a-0b);
   \path[linez] (a-3b) -- (n-end);
   \draw[bp,looseness=.8] (a-0) to (a-3);
-  \path (n-beg) to node[midway,yshift=-3em] {\relsize{+2}[Position $i$ paired to the right]} (n-end);
+  \path (n-beg) to node[midway,yshift=-3em] {\relsize{+2}[Position $i$ paired to the right with predetermined $k$]} (n-end);
 
   \node[lbl,below=3pt of n-beg] (c0) {$0$};
   \node[lbl,below=3pt of a-0b] (c1) {$i-1$};
@@ -185,7 +195,7 @@ line after snake=0pt,
   \node[basesmall] (a-3b)  at (6.75,0) {};
   \node[basephantom,left=\BSep of a-3b] (a-3c){$b$};
   \node[basesmall] (n-end) at (8,0) {};
-  \path (n-beg) to node[midway,yshift=-3em] {\relsize{+2}[Position $i$ paired to the left]} (n-end);
+  \path (n-beg) to node[midway,yshift=-3em] {\relsize{+2}[Position $i$ paired to the left with predetermined $k$]} (n-end);
 
 
   %\node[right=\BSep of a-0, basephantom] (a-1) {$a$};
